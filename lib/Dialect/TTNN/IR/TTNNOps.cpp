@@ -2600,6 +2600,14 @@ void mlir::tt::ttnn::ToTensorSpecOp::getCanonicalizationPatterns(
       return failure();
     }
 
+    // Constants are materialized in row-major host memory. Folding a device
+    // transfer or tilization into them would undo their operand workaround.
+    if (isa<ConstantOp>(creationOp) &&
+        (ttnnLayoutAttr.getBufferType() != BufferType::SystemMemory ||
+         ttnnLayoutAttr.isTiled())) {
+      return failure();
+    }
+
     MemoryConfigAttr targetMemoryConfigAttr =
         mlir::cast<mlir::tt::ttnn::TTNNMemoryConfigOpInterface>(
             toTensorSpecOp.getOperation())
