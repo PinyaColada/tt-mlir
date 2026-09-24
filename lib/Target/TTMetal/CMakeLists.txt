@@ -6,6 +6,7 @@ add_mlir_translation_library(TTMetalTargetFlatbuffer
     ${PROJECT_SOURCE_DIR}/include/Target/TTMetal
 
     LINK_LIBS PUBLIC
+    MLIRArithDialect
     MLIRTTMetalDialect
     MLIRTTKernelDialect
     MLIRTTIRDialect
